@@ -291,3 +291,51 @@ describe('/schedules/:scheduleId?delete=1', () => {
     });
   });
 });
+
+
+// TosakaZ の作った予定に uma というユーザーでアクセスして出欠選択とコメントをさせる
+describe('/schedules/:scheduleId/users/:userId/candidates/:candidateId', () => {
+  before(() => {
+    passportStub.install(app);
+    passportStub.login({ id: 555, username: 'anotheruser' });
+  });
+
+  after(() => {
+    passportStub.logout();
+    passportStub.uninstall(app);
+  });
+
+  it('uma が他のユーザーが作成した予定に出欠にチェックする', (done) => {
+    User.upsert({ userId: 555, username: 'anotheruser' }).then(() => {
+          const scheduleId = 'b6447e82-25cb-483f-9ab1-5fe869497dc7';  // アクセスする予定ID
+          Candidate.findAll({
+            where: { scheduleId: scheduleId }
+          }).then((candidates) => {
+            // 更新がされることをテスト
+            candidates.forEach((c) => {
+              request(app)
+                .post(`/schedules/${scheduleId}/users/${555}/candidates/${c.candidateId}`)
+                .send({ availability: 2 })  // 出席に更新
+                .expect('{"status":"OK","availability":2}')
+                .end((err, res) => {
+                  if (err) done(err);
+                  done()
+                });
+            });
+          }).then(() => {
+            request(app)
+              .post(`/schedules/${scheduleId}/users/${555}/comments`)
+              .send({ comment: 'anotheruser です' })
+              .expect('{"status":"OK","anotheruser です"}')
+              .end((err, res) => {
+                console.log('end() 内はエラーが発生するか終了するまで無視される');
+                if (err) done(err);
+                done();
+              });
+          }).then(() => {
+            console.log('一連の処理が終了したのでここが処理される（表示される）。');
+            done();
+          });
+    });
+  });
+});
