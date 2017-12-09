@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const Schedule = require('../models/schedule');
+const moment = require('moment-timezone');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -13,10 +14,13 @@ router.get('/', (req, res, next) => {
       },
       order: '"updatedAt" DESC'
     }).then((schedules) => {
+      schedules.forEach((schedule) => {
+        schedule.formattedUpdatedAt = moment(schedule.formattedUpdatedAt).tz('Asia/Tokyo').format('YYYY/MM/DD HH:mm');
+      });
       res.render('index', {
         title: title,
         user: req.user,
-        schedules: schedules
+        schedules: schedules,
       });
     });
   } else {
