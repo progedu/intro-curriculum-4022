@@ -14,6 +14,7 @@ router.get('/', (req, res, next) => {
       },
       order: '"updatedAt" DESC'
     }).then((schedules) => {
+      //曜日を入れてみた
       moment.lang('ja', {
         weekdaysShort: ["日", "月", "火", "水", "木", "金", "土"],
       });
