@@ -1,4 +1,5 @@
 extends layout
+extends schedule
 
 block content
   div(class="jumbotron")
@@ -18,4 +19,4 @@ block content
           tr
             td
               a(href="/schedules/#{schedule.scheduleId}") #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+            td #{schedule.formattedUpdatedAt}
