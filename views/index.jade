@@ -18,4 +18,5 @@ block content
           tr
             td
               a(href="/schedules/#{schedule.scheduleId}") #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+            //YYYY/MM/DD HH:mm 形式で表示
+            td #{schedule.formattedUpdatedAt}
