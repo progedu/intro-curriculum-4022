@@ -1,14 +1,22 @@
+//- layout.jadeを継承して
 extends layout
-
+//- contentブロックを書き換える
 block content
+  //- /schedulesにPOSTで入力データを渡す
   form(method="post", action="/schedules")
+    //- formグループ
     div(class="form-group")
+      //- ラベル
       label(for="scheduleName") 予定名
+      //- テキストボックス
       input(id="scheduleName" class="form-control" type="text" name="scheduleName")
+    //- 同上
     div(class="form-group")
       label(for="memo") メモ
       textarea(id="memo" class="form-control" name="memo")
+    //- 同上
     div(class="form-group")
       label(for="candidates") 候補日程 (改行して複数入力してください)
       textarea(id="candidates" class="form-control" name="candidates")
+    //- ボタン
     button(class="btn btn-info" type="submit") 予定をつくる
