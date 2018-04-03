@@ -3,7 +3,7 @@ extends layout
 block content
   div(class="jumbotron")
     h1 予定調整くん
-    p 予定調整くんは、GitHubで認証でき、予定を作って出欠が取れるサービスです
+    p 予定調整くんは、GitHubで認証でき、予定を作って出欠が取れるサービスです。
   if user
     div
       a(class="btn btn-info" href="/schedules/new") 予定を作る
@@ -18,4 +18,4 @@ block content
           tr
             td
               a(href="/schedules/#{schedule.scheduleId}") #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+            td #{schedule.formattedUpdatedAt}
