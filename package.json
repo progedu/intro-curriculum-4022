@@ -17,6 +17,7 @@
     "pug": "^2.0.0-rc.4",
     "jquery": "^3.3.1",
     "morgan": "~1.9.0",
+    "moment-timezone": "^0.5.0",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-github2": "^0.1.9",
