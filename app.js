@@ -9,6 +9,7 @@ var passport = require('passport');
 // モデルの読み込み
 var User = require('./models/user');
 var Schedule = require('./models/schedule');
+const moment = require('moment-timezone');
 var Availability = require('./models/availability');
 var Candidate = require('./models/candidate');
 var Comment = require('./models/comment');
