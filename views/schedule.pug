@@ -5,7 +5,7 @@ block content
     div.card-header
       h4 #{schedule.scheduleName}
     div.card-body
-      p(style="white-space:pre;") #{schedule.memo}
+      p(style="white-space:wrap;") #{schedule.memo}
     div.card-footer
       p 作成者: #{schedule.user.username}
   - var isMine = parseInt(user.id) === schedule.user.userId
