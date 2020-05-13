@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
       order: [['"updatedAt"', 'DESC']]
     }).then((schedules) => {
       schedules.forEach((schedule) =>{
-        schedule.formattedUpdatedAt = moment(Schedule.updatedAt).tz('Asia/tokyo').format('YYYY/MM/DD HH:mm')
+        schedule.formattedUpdatedAt = moment(schedule.updatedAt).tz('Asia/tokyo').format('YYYY/MM/DD HH:mm')
       });
       res.render('index', {
         title: title,
