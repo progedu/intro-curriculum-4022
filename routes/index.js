@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
   const title = '予定調整くん';
   if (req.user) {
     Schedule.findAll({
-      where: {
+      where: {ｇ
         createdBy: req.user.id
       },
       order: [['updatedAt', 'DESC']]
