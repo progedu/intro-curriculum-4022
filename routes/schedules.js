@@ -8,17 +8,19 @@ const Candidate = require('../models/candidate');
 const User = require('../models/user');
 const Availability = require('../models/availability');
 const Comment = require('../models/comment');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 
-router.get('/new', authenticationEnsurer, (req, res, next) => {
-  res.render('new', { user: req.user });
+router.get('/new', authenticationEnsurer, csrfProtection, (req, res, next) => {
+  res.render('new', { user: req.user, csrfToken: req.csrfToken() });
 });
 
-router.post('/', authenticationEnsurer, (req, res, next) => {
+router.post('/', authenticationEnsurer, csrfProtection, (req, res, next) => {
   const scheduleId = uuid.v4();
   const updatedAt = new Date();
   Schedule.create({
     scheduleId: scheduleId,
-    scheduleName: req.body.scheduleName.slice(0, 255) || '（名称未設定）',
+    scheduleName: req.body.scheduleName.slice(0, 255) || '（No name）',
     memo: req.body.memo,
     createdBy: req.user.id,
     updatedAt: updatedAt
@@ -48,7 +50,7 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
         order: [['candidateId', 'ASC']]
       });
     } else {
-      const err = new Error('指定された予定は見つかりません');
+      const err = new Error('Not found this event..');
       err.status = 404;
       next(err);
     }
@@ -120,7 +122,7 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
   });
 });
 
-router.get('/:scheduleId/edit', authenticationEnsurer, (req, res, next) => {
+router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection, (req, res, next) => {
   Schedule.findOne({
     where: {
       scheduleId: req.params.scheduleId
@@ -134,11 +136,12 @@ router.get('/:scheduleId/edit', authenticationEnsurer, (req, res, next) => {
         res.render('edit', {
           user: req.user,
           schedule: schedule,
-          candidates: candidates
+          candidates: candidates,
+          csrfToken: req.csrfToken()
         });
       });
     } else {
-      const err = new Error('指定された予定がない、または、予定する権限がありません');
+      const err = new Error('There is no such a event or you dont have permission to edit it.');
       err.status = 404;
       next(err);
     }
@@ -149,7 +152,7 @@ function isMine(req, schedule) {
   return schedule && parseInt(schedule.createdBy) === parseInt(req.user.id);
 }
 
-router.post('/:scheduleId', authenticationEnsurer, (req, res, next) => {
+router.post('/:scheduleId', authenticationEnsurer, csrfProtection, (req, res, next) => {
   Schedule.findOne({
     where: {
       scheduleId: req.params.scheduleId
@@ -160,7 +163,7 @@ router.post('/:scheduleId', authenticationEnsurer, (req, res, next) => {
         const updatedAt = new Date();
         schedule.update({
           scheduleId: schedule.scheduleId,
-          scheduleName: req.body.scheduleName.slice(0, 255) || '（名称未設定）',
+          scheduleName: req.body.scheduleName.slice(0, 255) || '（No name）',
           memo: req.body.memo,
           createdBy: req.user.id,
           updatedAt: updatedAt
@@ -178,12 +181,12 @@ router.post('/:scheduleId', authenticationEnsurer, (req, res, next) => {
           res.redirect('/');
         });
       } else {
-        const err = new Error('不正なリクエストです');
+        const err = new Error('Your request is not working..');
         err.status = 400;
         next(err);
       }
     } else {
-      const err = new Error('指定された予定がない、または、編集する権限がありません');
+      const err = new Error('There is no such a event or you dont have permission to edit it.');
       err.status = 404;
       next(err);
     }

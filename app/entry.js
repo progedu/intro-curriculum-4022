@@ -16,7 +16,7 @@ $('.availability-toggle-button').each((i, e) => {
       { availability: nextAvailability },
       (data) => {
         button.data('availability', data.availability);
-        const availabilityLabels = ['欠', '？', '出'];
+        const availabilityLabels = ['Nope..', '？', 'Yep!'];
         button.text(availabilityLabels[data.availability]);
 
         const buttonStyles = ['btn-danger', 'btn-secondary', 'btn-success'];
@@ -30,7 +30,7 @@ const buttonSelfComment = $('#self-comment-button');
 buttonSelfComment.click(() => {
   const scheduleId = buttonSelfComment.data('schedule-id');
   const userId = buttonSelfComment.data('user-id');
-  const comment = prompt('コメントを255文字以内で入力してください。');
+  const comment = prompt('You can input any comment max.255 characters!');
   if (comment) {
     $.post(`/schedules/${scheduleId}/users/${userId}/comments`,
       { comment: comment },
