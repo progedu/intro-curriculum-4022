@@ -1,7 +1,10 @@
 'use strict';
 const express = require('express');
+const moment = require('moment-timezone');
+
 const router = express.Router();
 const Schedule = require('../models/schedule');
+
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -11,8 +14,12 @@ router.get('/', (req, res, next) => {
       where: {
         createdBy: req.user.id
       },
-      order: '"updatedAt" DESC'
+      order: [['updatedAt', 'DESC']]
     }).then((schedules) => {
+      schedules.forEach(schedules => {
+        // formattedUpdatedAt プロパティを schedule に新たに作り、moment で updatedAt を形式変換する
+        schedules.formattedUpdatedAt = moment(schedules.updatedAt).tz('Asia/Tokyo').format('YYYY/MM/DD HH:mm');
+      });
       res.render('index', {
         title: title,
         user: req.user,
