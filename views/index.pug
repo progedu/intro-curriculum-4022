@@ -10,12 +10,20 @@ block content
     - var hasSchedule = schedules.length > 0
     if hasSchedule
       h3.my-3 あなたの作った予定一覧
-      table.table
+      table.table.table-dark(style="background: linear-gradient(45deg,#e647e6 0%, #00B7FF 100%)")
         tr
-          th 予定名
-          th 更新日時
-        each schedule in schedules
+          th.text-right 現在時刻 : 
+          th.font-weight-light#currentTime
+      table.table.table-striped.table-hover
+        thead.thead-dark
           tr
-            td
-              a(href=`/schedules/${schedule.scheduleId}`) #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+            th 予定名
+            th 更新日時
+            th 経過時間表示
+        tbody
+          each schedule in schedules
+            tr
+              td
+                a(href=`/schedules/${schedule.scheduleId}`) #{schedule.scheduleName}
+              td #{schedule.formattedUpdatedAt}
+              td #{schedule.formattedPassedTime}

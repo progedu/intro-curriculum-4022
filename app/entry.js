@@ -39,3 +39,9 @@ buttonSelfComment.click(() => {
       });
   }
 });
+
+const currentTime = $('#currentTime');
+setInterval(() => {
+  const now = new Date();
+  currentTime.text(now.toLocaleString());
+}, 1000);
